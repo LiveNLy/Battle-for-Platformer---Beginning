@@ -12,6 +12,7 @@ public class EnemyMover : MonoBehaviour
     private int _numberOfMovePoint = 0;
     private bool _flipped = true;
     private Coroutine _patroling;
+    private float _timeForCoroutine = 0.001f;
 
     private void Awake()
     {
@@ -55,7 +56,7 @@ public class EnemyMover : MonoBehaviour
 
     private IEnumerator FollowTheCharacter(Vector2 characterPosition)
     {
-        var time = new WaitForSeconds(0.001f);
+        var time = new WaitForSeconds(_timeForCoroutine);
 
         while (enabled)
         {
@@ -67,7 +68,7 @@ public class EnemyMover : MonoBehaviour
 
     private IEnumerator Patroling()
     {
-        var time = new WaitForSeconds(0.001f);
+        var time = new WaitForSeconds(_timeForCoroutine);
 
         while (enabled)
         {
@@ -82,12 +83,7 @@ public class EnemyMover : MonoBehaviour
 
     private void Flip()
     {
-        if (_numberOfMovePoint == 0 && !_flipped)
-        {
-            _fliper.Flip();
-            _flipped = !_flipped;
-        }
-        else if (_numberOfMovePoint == 1 && _flipped)
+        if (_numberOfMovePoint == 0 && !_flipped || _numberOfMovePoint == 1 && _flipped)
         {
             _fliper.Flip();
             _flipped = !_flipped;

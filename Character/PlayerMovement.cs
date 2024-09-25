@@ -62,12 +62,7 @@ public class PlayerMovement : MonoBehaviour
 
         _animator.SetBool(Running, IsCharacterMoving());
 
-        if (_direction > 0 && !_flipped)
-        {
-            _fliper.Flip();
-            _flipped = !_flipped;
-        }
-        else if (_direction < 0 && _flipped)
+        if (_direction > 0 && !_flipped || _direction < 0 && _flipped)
         {
             _fliper.Flip();
             _flipped = !_flipped;
