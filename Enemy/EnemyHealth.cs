@@ -1,4 +1,4 @@
-using System.Collections;
+using System;
 using UnityEngine;
 
 public class EnemyHealth : MonoBehaviour
@@ -7,6 +7,12 @@ public class EnemyHealth : MonoBehaviour
     [SerializeField] private EnemyHurtBox _enemyHurtBox;
 
     private float _losedHealthByHit = 45f;
+
+
+    private void OnEnable()
+    {
+        _enemyHurtBox.LosedHealth += LoseHealth;
+    }
 
     private void FixedUpdate()
     {
@@ -17,18 +23,13 @@ public class EnemyHealth : MonoBehaviour
         }
     }
 
-    private void LoseHealth()
-    {
-        _health -= _losedHealthByHit;
-    }
-
-    private void OnEnable()
-    {
-        _enemyHurtBox.LosedHealth += LoseHealth;
-    }
-
     private void OnDisable()
     {
         _enemyHurtBox.LosedHealth -= LoseHealth;
+    }
+
+    private void LoseHealth()
+    {
+        _health -= _losedHealthByHit;
     }
 }

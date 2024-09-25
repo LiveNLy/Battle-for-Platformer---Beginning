@@ -4,6 +4,7 @@ using UnityEngine;
 public class CollisionHandler : MonoBehaviour
 {
     public event Action CoinTaken;
+    public event Action MedKitTaken;
     public event Action LosingHealth;
     public event Action LosedHeath;
 
@@ -12,6 +13,10 @@ public class CollisionHandler : MonoBehaviour
         if (collision.gameObject.TryGetComponent(out Coin coin))
         {
             CoinTaken?.Invoke();
+        }
+        else if (collision.gameObject.TryGetComponent(out MedKit medKit))
+        {
+            MedKitTaken?.Invoke();
         }
         else if (collision.gameObject.TryGetComponent(out DeathTrigger deathTrigger))
         {

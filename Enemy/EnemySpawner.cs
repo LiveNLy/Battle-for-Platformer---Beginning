@@ -20,10 +20,8 @@ public class EnemySpawner : MonoBehaviour
         while (enabled)
         {
             _enemies[_enemyNumber].gameObject.SetActive(true);
-            _enemyNumber++;
-
-            if (_enemyNumber >= _enemies.Length)
-                _enemyNumber = 0;
+            _enemies[_enemyNumber].MoveOnActive();
+            _enemyNumber = (++_enemyNumber) % _enemies.Length;
 
             yield return countdown;
         }

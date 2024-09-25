@@ -5,11 +5,18 @@ public class Health : MonoBehaviour
 {
     [SerializeField] private float _health = 100f;
     [SerializeField] private CollisionHandler _collisionHandler;
-    [SerializeField] private MedKitIntermediary _medKitIntermediary;
 
     private float _losedHealthByHit = 20f;
+    private float _healFromMed = 40f;
 
     public event Action LostHeath;
+
+    private void OnEnable()
+    {
+        _collisionHandler.MedKitTaken += Heal;
+        _collisionHandler.LosingHealth += LoseHealth;
+        _collisionHandler.LosedHeath += Death;
+    }
 
     private void FixedUpdate()
     {
@@ -17,6 +24,13 @@ public class Health : MonoBehaviour
         {
             ResetHealth();
         }
+    }
+
+    private void OnDisable()
+    {
+        _collisionHandler.MedKitTaken -= Heal;
+        _collisionHandler.LosingHealth -= LoseHealth;
+        _collisionHandler.LosedHeath -= Death;
     }
 
     private void ResetHealth()
@@ -30,27 +44,13 @@ public class Health : MonoBehaviour
         _health -= _losedHealthByHit;
     }
 
-    private void Heal(int heal)
+    private void Heal()
     {
-        _health += heal;
+        _health += _healFromMed;
     }
 
     private void Death()
     {
         _health = 0;
-    }
-
-    private void OnEnable()
-    {
-        _medKitIntermediary.Healing += Heal;
-        _collisionHandler.LosingHealth += LoseHealth;
-        _collisionHandler.LosedHeath += Death;
-    }
-
-    private void OnDisable()
-    {
-        _medKitIntermediary.Healing -= Heal;
-        _collisionHandler.LosingHealth -= LoseHealth;
-        _collisionHandler.LosedHeath -= Death;
     }
 }

@@ -12,13 +12,18 @@ public class EnemyMover : MonoBehaviour
     private int _numberOfMovePoint = 0;
     private bool _flipped = true;
     private Coroutine _patroling;
-    private Coroutine _followTheCharacter;
 
-    private void Start()
+    private void Awake()
     {
         _fliper = GetComponent<Fliper>();
 
         StartCoroutinePatroling();
+    }
+
+    private void OnEnable()
+    {
+        _fieldOfView.CharacterFound += StartCoroutineFollowing;
+        _fieldOfView.CharacterLost += StartCoroutinePatroling;
     }
 
     private void Update()
@@ -26,24 +31,16 @@ public class EnemyMover : MonoBehaviour
         Flip();
     }
 
-    private void Flip()
+    private void OnDisable()
     {
-        if (_numberOfMovePoint == 0 && !_flipped)
-        {
-            _fliper.Flip();
-            _flipped = !_flipped;
-        }
-        else if (_numberOfMovePoint == 1 && _flipped)
-        {
-            _fliper.Flip();
-            _flipped = !_flipped;
-        }
+        _fieldOfView.CharacterFound -= StartCoroutineFollowing;
+        _fieldOfView.CharacterLost -= StartCoroutinePatroling;
     }
 
-    private void StartCoroutinePatroling()
+    public void StartCoroutinePatroling()
     {
-        if (_followTheCharacter != null)
-            StopCoroutine(_followTheCharacter);
+        if (_patroling != null)
+            StopCoroutine(_patroling);
 
         _patroling = StartCoroutine(Patroling());
     }
@@ -53,7 +50,7 @@ public class EnemyMover : MonoBehaviour
         if (_patroling != null)
             StopCoroutine(_patroling);
 
-        _followTheCharacter = StartCoroutine(FollowTheCharacter(characterPosition));
+        _patroling = StartCoroutine(FollowTheCharacter(characterPosition));
     }
 
     private IEnumerator FollowTheCharacter(Vector2 characterPosition)
@@ -83,15 +80,17 @@ public class EnemyMover : MonoBehaviour
         }
     }
 
-    private void OnEnable()
+    private void Flip()
     {
-        _fieldOfView.CharacterFound += StartCoroutineFollowing;
-        _fieldOfView.CharacterLost += StartCoroutinePatroling;
-    }
-
-    private void OnDisable()
-    {
-        _fieldOfView.CharacterFound -= StartCoroutineFollowing;
-        _fieldOfView.CharacterLost -= StartCoroutinePatroling;
+        if (_numberOfMovePoint == 0 && !_flipped)
+        {
+            _fliper.Flip();
+            _flipped = !_flipped;
+        }
+        else if (_numberOfMovePoint == 1 && _flipped)
+        {
+            _fliper.Flip();
+            _flipped = !_flipped;
+        }
     }
 }

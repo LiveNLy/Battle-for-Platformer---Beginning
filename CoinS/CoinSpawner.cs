@@ -24,14 +24,14 @@ public class CoinSpawner : MonoBehaviour
             maxSize: _poolMaxSize);
     }
 
-    private void Start()
-    {
-        StartCoroutine(SpawnCoin(_repeatRate));
-    }
-
     private void OnEnable()
     {
         _coinPrefab.CoinReleasing += ReleaseCoin;
+    }
+
+    private void Start()
+    {
+        StartCoroutine(SpawnCoin(_repeatRate));
     }
 
     private void OnDisable()

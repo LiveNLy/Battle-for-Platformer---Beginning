@@ -17,7 +17,7 @@ public class PlayerMovement : MonoBehaviour
     private bool _flipped = true;
     private bool _isJump;
 
-    private void Start()
+    private void Awake()
     {
         _animator = GetComponent<Animator>();
         _fliper = GetComponent<Fliper>();
